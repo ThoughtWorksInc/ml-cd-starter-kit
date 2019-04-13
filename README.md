@@ -15,6 +15,8 @@
 In `./values.yaml`:
 - If you're using another name of the helm release (instead of `my-release`), replace `my-release` with the name of your release in: `elasticsearch.url: http://my-release-elasticsearch-client:9200`
 
+- TODO: copy over instructions from charts/mlflow/README.md
+
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
