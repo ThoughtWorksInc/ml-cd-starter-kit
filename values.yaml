@@ -17,6 +17,9 @@ kibana:
     kibana.yml:
       elasticsearch.url: http://my-release-elasticsearch-client:9200
 
+grafana:
+  service:
+    type: LoadBalancer
 
 logstash:
   enabled: false
