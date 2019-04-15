@@ -79,28 +79,3 @@ spec:
       securityContext:
         privileged: true
 ```
-```sh
-
-
-```
-
-TODOs:
-- helm/k8s
-  - expose GoCD, kibana, MLFlow as public services
-  - use helm instead of manual kubectl steps (is this a good idea?)
-  - Figure out how to create different namespaces for staging and prod
-  - Rename ci-workshop-app-chart to ci-workshop-app
-  - Give GoCD service account cluster-admin access (is this a good idea?) and make GoCD run kubectl commands as gocd service account
-  - include mlflow in chart
-  - figure out why elasticsearch is not up after 20mins
-  - figure out how to pass secrets for mlflow subchart
-- GoCD
-  - Figure out how to skip artifact if job fails (ticket raised. if no solution, can add docker push as the last task in a job)
-  - Suggest to tomzo/sheroy about improving local yaml syntax checker (none of the ones listed in tomzo/gocd-yaml-config-plugin works) 
-- replace all project-specific values (e.g. ai-sg-workshop, etc.) to environment variables
-
-DONE
-- Figure out how to make first `docker build` command faster on GoCD
-- install our demo app in this cluster
-- push our app to docker hub
-- create helm chart for our app

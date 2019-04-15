@@ -27,14 +27,11 @@ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admi
 helm init --service-account tiller
 
 # wait for pods and services to be up
-watch kubectl get pods,services
-```
+kubectl get pods,services 
 
-<!-- TODO: 
-- Add LoadBalancer to GoCD
-- Add Grafana subchart: https://github.com/helm/charts/tree/master/stable/grafana
-- Fix mlflow subchart
--->
+# mac users can `brew install watch` and run:
+# watch kubectl get pods,services
+```
 
 
 In `./values.yaml`:
