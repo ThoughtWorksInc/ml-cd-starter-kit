@@ -62,7 +62,6 @@ kubectl logs POD_NAME # get pod name from kubectl get pods
     - URL: URL to your git repo containing the gocd pipeline yaml file.
   - Click on Test Connection, and then Save
 - Create elastic profile `docker-dind-kubectl`
-  - In 'Config Properties' radio button, type: sheroy/gocd-agent-with-kubectl:latest
   - Click on 'Pod Yaml' radio button, and paste the following:
 ```yaml
 apiVersion: v1
@@ -75,7 +74,7 @@ spec:
   serviceAccountName: default
   containers:
     - name: gocd-agent-container-{{ CONTAINER_POSTFIX }}
-      image: sheroy/gocd-agent-with-kubectl:latest
+      image: godemo/gocd-agent-with-kubectl:latest
       securityContext:
         privileged: true
 ```
