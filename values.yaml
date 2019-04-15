@@ -1,6 +1,11 @@
 # Default values for elk.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+gocd:
+  server:
+    service:
+      type: LoadBalancer   # expose gocd as a service
+
 elasticsearch:
   enabled: true
 
