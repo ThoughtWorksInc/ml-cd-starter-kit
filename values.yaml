@@ -15,7 +15,7 @@ kibana:
     type: LoadBalancer
   files:
     kibana.yml:
-      elasticsearch.url: http://my-release-elasticsearch-client:9200
+      elasticsearch.url: http://ml-cd-starter-kit-elasticsearch-client:9200
 
 grafana:
   service:

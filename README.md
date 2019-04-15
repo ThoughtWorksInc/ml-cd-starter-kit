@@ -35,28 +35,37 @@ kubectl get pods,services
 
 
 In `./values.yaml`:
-- If you're using another name of the helm release (instead of `my-release`), replace `my-release` with the name of your release in: `elasticsearch.url: http://my-release-elasticsearch-client:9200`
+- If you're using another name of the helm release (instead of `ml-cd-starter-kit`), replace `ml-cd-starter-kit` with the name of your release in: `elasticsearch.url: http://ml-cd-starter-kit-elasticsearch-client:9200`
 
 ## Installing the Chart
 
-To install the chart with the release name `my-release`:
+To install the chart with the release name `ml-cd-starter-kit`:
 
 ```bash
-$ helm install --name my-release .
+$ helm install --name ml-cd-starter-kit .
 ```
+
+TODO: Add instructions on GoCD config (elastic agent profile and dockerhub artifact repository)in `GCP.md`
+
+That's it! You now have a kubernetes cluster running:
+- GoCD for continuous integration
+- EFKG for monitoring
+- MLFlow for tracking metrics and hyperparameters
+
+You can now go to your project repo (e.g. `ci-workshop-app`) and start developing and pushing your changes.
 
 ## Deleting the Charts
 
 Delete the Helm deployment as normal
 
 ```
-$ helm delete my-release
+$ helm delete ml-cd-starter-kit
 ```
 
 Deletion of the StatefulSet doesn't cascade to deleting associated PVCs. To delete them:
 
 ```
-$ kubectl delete pvc -l release=my-release,component=data
+$ kubectl delete pvc -l release=ml-cd-starter-kit,component=data
 ```
 
 ## Configuration
