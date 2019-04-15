@@ -17,7 +17,7 @@ kubectl create clusterrolebinding default-cluster-rule --clusterrole=cluster-adm
 # - read more here: https://github.com/helm/helm/issues/3130
 
 # initialize helm on k8s cluster (install tiller into the cluster)
-helm init --service-account tiller  # TODO: try without the --service-account argument
+helm init --service-account tiller
 
 # create storage class for gocd
 kubectl create -f storage/GoCDStorageClass.yaml
@@ -93,6 +93,7 @@ TODOs:
   - Give GoCD service account cluster-admin access (is this a good idea?) and make GoCD run kubectl commands as gocd service account
   - include mlflow in chart
   - figure out why elasticsearch is not up after 20mins
+  - figure out how to pass secrets for mlflow subchart
 - GoCD
   - Figure out how to skip artifact if job fails (ticket raised. if no solution, can add docker push as the last task in a job)
   - Suggest to tomzo/sheroy about improving local yaml syntax checker (none of the ones listed in tomzo/gocd-yaml-config-plugin works) 

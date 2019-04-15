@@ -12,6 +12,31 @@
 ...
 
 ## Getting started
+
+### Create and configure cluster
+
+```sh
+# provision cluster on GCP
+gcloud container clusters create ml-cd-starter-kit --region asia-southeast1
+
+# create tiller service account and give tiller access to default namespace
+kubectl --namespace kube-system create serviceaccount tiller
+kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+
+# initialize helm on k8s cluster (install tiller into the cluster)
+helm init --service-account tiller
+
+# wait for pods and services to be up
+watch kubectl get pods,services
+```
+
+<!-- TODO: 
+- Add LoadBalancer to GoCD
+- Add Grafana subchart: https://github.com/helm/charts/tree/master/stable/grafana
+- Fix mlflow subchart
+-->
+
+
 In `./values.yaml`:
 - If you're using another name of the helm release (instead of `my-release`), replace `my-release` with the name of your release in: `elasticsearch.url: http://my-release-elasticsearch-client:9200`
 
