@@ -13,7 +13,7 @@ A helm chart that contains subcharts commonly used in ML projects (e.g. MLFlow, 
 
 ## Getting started
 
-### Install local dependencies
+### Pre-requisites
 
 1. Create project on GCP: https://cloud.google.com/resource-manager/docs/creating-managing-projects
 2. Install `gcloud`
@@ -22,10 +22,11 @@ export CLOUDSDK_CORE_DISABLE_PROMPTS=1
 curl https://sdk.cloud.google.com | bash
 export PATH=$HOME/google-cloud-sdk/bin
 ```
-3. Configure gcloud cli: https://cloud.google.com/sdk/docs/quickstart-macos (scroll down to "Initialize the SDK")
+3. Configure gcloud cli (authenticate, set default project, etc.): https://cloud.google.com/sdk/docs/quickstart-macos (scroll down to "Initialize the SDK")
 
 ### Create and configure cluster
 
+#### Option 1: GCP
 ```sh
 # provision cluster on GCP
 gcloud container clusters create my-cluster region asia-southeast1
@@ -38,12 +39,25 @@ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admi
 helm init --service-account tiller
 
 # wait for pods and services to be up
-kubectl get pods,services 
-
+kubectl get pods,services --all-namespaces
 # mac users can `brew install watch` and run:
-# watch kubectl get pods,services
+# watch kubectl get pods,services --all-namespaces
 ```
 
+#### Option 2: Minikube
+
+```sh
+# Optionally delete minikube
+minikube delete
+
+# Ensure that your minikube is at least 0.34
+minikube version
+# if not, upgrade minikube
+brew cask upgrade minikube
+
+# start kubernetes cluster on minikube
+minikube start --vm-driver=virtualbox --cpus 6 --memory 8192 --bootstrapper=kubeadm --extra-config=apiserver.authorization-mode=RBAC
+```
 
 ## Installing the Chart
 
@@ -52,7 +66,13 @@ kubectl get pods,services
 3. To install the chart with the release name `ml-cd-starter-kit`:
 
 ```bash
-$ helm install --name ml-cd-starter-kit .  # you can replace ml-cd-starter-kit with the name of your release
+helm install --name ml-cd-starter-kit .  
+# note: you can replace ml-cd-starter-kit with the name of your release
+
+# wait for pods and services to be up
+kubectl get pods,services
+# mac users can `brew install watch` and run:
+# watch kubectl get pods,services
 ```
 
 That's it! You now have a kubernetes cluster running:
@@ -86,13 +106,13 @@ kubectl logs POD_NAME # get pod name from kubectl get pods
 Delete the Helm deployment as normal
 
 ```
-$ helm delete ml-cd-starter-kit
+helm delete ml-cd-starter-kit
 ```
 
 Deletion of the StatefulSet doesn't cascade to deleting associated PVCs. To delete them:
 
 ```
-$ kubectl delete pvc -l release=ml-cd-starter-kit,component=data
+kubectl delete pvc -l release=ml-cd-starter-kit,component=data
 ```
 
 ### Destroy k8s cluster
@@ -110,3 +130,4 @@ TODO:
 - run above step against ml-cd-starter-kit-gocd service account
 - Make CI run kubectl commands as ml-cd-starter-kit-gocd service account
 - read more here: https://github.com/helm/helm/issues/3130
+- find and replace 'davified'?
