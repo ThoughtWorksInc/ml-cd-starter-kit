@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "ci-workshop-app-chart.fullname" . }}
+  name: {{ include "ml-app-template.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "ci-workshop-app-chart.name" . }}
-    helm.sh/chart: {{ include "ci-workshop-app-chart.chart" . }}
+    app.kubernetes.io/name: {{ include "ml-app-template.name" . }}
+    helm.sh/chart: {{ include "ml-app-template.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "ci-workshop-app-chart.name" . }}
+      app.kubernetes.io/name: {{ include "ml-app-template.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "ci-workshop-app-chart.name" . }}
+        app.kubernetes.io/name: {{ include "ml-app-template.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:

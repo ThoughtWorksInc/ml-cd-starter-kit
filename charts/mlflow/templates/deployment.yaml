@@ -23,16 +23,6 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          # env:
-            # - name: GCP_STORAGE_BUCKET
-            #   value: {{.Values.gcpStorageBucket}}
-            # - name: GCLOUD_SERVICE_KEY_ENC
-            #   value: {{.Values.gcloudServiceKeyEnc}}
-            # - name: GCLOUD_SERVICE_KEY_ENC
-            #   valueFrom:
-            #     secretKeyRef:
-            #       key:  gcloudServiceKeyEnc
-            #       name: {{ .Release.Name }}-auth    # TODO: Figure out which is the correct way to set secret values
           ports:
             - name: http
               containerPort: {{ .Values.deployment.containerPort }}

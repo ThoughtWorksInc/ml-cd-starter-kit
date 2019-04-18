@@ -1,12 +1,12 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "ci-workshop-app-chart.fullname" . -}}
+{{- $fullName := include "ml-app-template.fullname" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    app.kubernetes.io/name: {{ include "ci-workshop-app-chart.name" . }}
-    helm.sh/chart: {{ include "ci-workshop-app-chart.chart" . }}
+    app.kubernetes.io/name: {{ include "ml-app-template.name" . }}
+    helm.sh/chart: {{ include "ml-app-template.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
   {{- with .Values.ingress.annotations }}
