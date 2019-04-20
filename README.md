@@ -23,6 +23,10 @@ curl https://sdk.cloud.google.com | bash
 export PATH=$HOME/google-cloud-sdk/bin
 ```
 3. Configure gcloud cli (authenticate, set default project, etc.): https://cloud.google.com/sdk/docs/quickstart-macos (scroll down to "Initialize the SDK")
+4. Install helm
+- mac: `brew install kubernetes-helm`
+- windows: `choco install kubernetes-helm`
+- Other OS: see https://github.com/helm/helm#install
 
 ### Create and configure k8s cluster
 
@@ -129,7 +133,11 @@ kubectl delete pvc -l release=ml-cd-starter-kit,component=data
 ```
 
 ### Destroy k8s cluster
-**Important**: Running k8s clusters will get expensive, so definitely remember to destroy your cluster when you're done exploring this repo:
+
+**Important**
+```diff
+!  Running k8s clusters will get expensive, so definitely remember to destroy your cluster when you're done exploring this repo:
+```
 
 `gcloud container clusters delete my-cluster --region asia-southeast1`
 
