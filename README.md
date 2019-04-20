@@ -7,10 +7,6 @@ A helm chart that contains subcharts commonly used in ML projects (e.g. MLFlow, 
 * Kubernetes 1.8+
 * PV dynamic provisioning support on the underlying infrastructure
 
-## Chart Details
-
-...
-
 ## Getting started
 
 ### Pre-requisites
@@ -136,7 +132,8 @@ kubectl delete pvc -l release=ml-cd-starter-kit,component=data
 
 **Important**
 ```diff
-!  Running k8s clusters will get expensive, so definitely remember to destroy your cluster when you're done exploring this repo:
+!  Running k8s clusters will get expensive, so definitely remember to destroy your 
+!  cluster when you're done exploring this repo:
 ```
 
 `gcloud container clusters delete my-cluster --region asia-southeast1`
@@ -147,8 +144,11 @@ Each requirement is configured with the options provided by that Chart.
 Please consult the relevant charts for their configuration options.
 
 TODO: 
+- Update README
+- Try things on minikube
+- Reduce number of instances of fluentd elasticsearch
+- Replace default:default service account with gocd service account, and run kubectl command on gocd as gocd service account
+
+DONE:
 - Add instructions on GoCD config (elastic agent profile and dockerhub artifact repository)in `GCP.md`
-- run above step against ml-cd-starter-kit-gocd service account
-- Make CI run kubectl commands as ml-cd-starter-kit-gocd service account
-- read more here: https://github.com/helm/helm/issues/3130
-- find and replace 'davified'?
+- give instructions for people to find and replace 'davified' with their own docker image?
