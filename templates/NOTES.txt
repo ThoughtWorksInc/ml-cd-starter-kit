@@ -1,33 +1,29 @@
-The elasticsearch cluster and associated extras have been installed.
+The {{ .Release.Name }} cluster and associated extras have been installed.
 
-{{- if .Values.kibana.enabled }}
-Kibana can be accessed:
+You can access your services (GoCD, MLFlow, Kibana, Grafana) as follows:
 
-  * Within your cluster, at the following DNS name at port 9200:
+  * From outside the cluster, run these commands:
+    
+    kubectl get svc
 
-    {{ template "kibana.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+    Copy and paste the corresponding EXTERNAL-IP and PORT (the port on the left is the exposed port) 
+    in your browser.
 
-  * From outside the cluster, run these commands in the same shell:
-    {{- if contains "NodePort" .Values.kibana.service.type }}
+    NOTE:    It may take a few minutes for the pods and services to be available.
+             You can watch the status of by running 'kubectl get svc'
+           
+    WARNING: By default, most services (e.g. GoCD, MLFlow and elasticsearch) are exposed directly to 
+             the internet.
+             As a minimum level of security; switch to ClusterIP/NodePort and place an Nginx gateway 
+             infront of the cluster in order to lock down access to dangerous HTTP endpoints and verbs.
 
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "kibana.fullname" . }})
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    echo http://$NODE_IP:$NODE_PORT
-    {{- else if contains "LoadBalancer" .Values.kibana.service.type }}
+  * Accessing pods on localhost:
 
-     WARNING: You have likely exposed your Elasticsearch cluster direct to the internet.
-              Elasticsearch does not implement any security for public facing clusters by default.
-              As a minimum level of security; switch to ClusterIP/NodePort and place an Nginx gateway infront of the cluster in order to lock down access to dangerous HTTP endpoints and verbs.
+    See all pods and services, run:
 
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get svc -w {{ template "kibana.fullname" . }}'
-
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "kibana.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-    echo http://$SERVICE_IP:9200
-    {{- else if contains "ClusterIP"  .Values.kibana.service.type }}
-
-    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "kibana.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-    echo "Visit http://127.0.0.1:5601 to use Kibana"
-    kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 5601:5601
-    {{- end }}
-{{- end }}
+    kubectl get pods,svc
+    kubectl port-forward --namespace {{ .Release.Namespace }} POD_NAME PORT:PORT
+    
+    Replace POD_NAME and PORT with the pod name and port of the service that you want to access.
+    Visit http://localhost:PORT on your browser.
+    
