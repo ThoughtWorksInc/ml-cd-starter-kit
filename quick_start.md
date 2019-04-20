@@ -1,4 +1,7 @@
+# Getting started
+
 ```sh
+# create k8s cluster
 gcloud container clusters create my-cluster region asia-southeast1
 
 # create tiller service account and give tiller access to default namespace
