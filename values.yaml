@@ -37,6 +37,8 @@ filebeat:
 
 fluentd:
   enabled: true
+  service:
+    type: LoadBalancer
 
 fluent-bit:
   enabled: false
