@@ -85,6 +85,11 @@ helm install --name ml-cd-starter-kit .
 kubectl get pods,services
 # mac users can `brew install watch` and run:
 # watch kubectl get pods,services (Hit Ctrl+C to exit)
+
+# create a new release for our production app (ml-app-template)mmand installed a staging)
+cd charts/ml-app-template
+helm install --name ml-cd-starter-kit-prod -f values.yaml .
+# note: if you use another release name, remember to update it in the deploy_prod stage in ml-app-template/ci.gocd.yaml
 ```
 
 That's it! You now have a kubernetes cluster running cross-cutting services (GoCD, MLFlow, EFK, Grafana) and an instance of [ml-app-template](https://github.com/ThoughtWorksInc/ml-app-template)
@@ -144,11 +149,5 @@ Each requirement is configured with the options provided by that Chart.
 Please consult the relevant charts for their configuration options.
 
 TODO: 
-- Update README
 - Try things on minikube
-- Reduce number of instances of fluentd elasticsearch
 - Replace default:default service account with gocd service account, and run kubectl command on gocd as gocd service account
-
-DONE:
-- Add instructions on GoCD config (elastic agent profile and dockerhub artifact repository)in `GCP.md`
-- give instructions for people to find and replace 'davified' with their own docker image?
