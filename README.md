@@ -148,6 +148,3 @@ kubectl delete pvc -l release=ml-cd-starter-kit,component=data
 Each requirement is configured with the options provided by that Chart.
 Please consult the relevant charts for their configuration options.
 
-TODO: 
-- Try things on minikube
-- Replace default:default service account with gocd service account, and run kubectl command on gocd as gocd service account
