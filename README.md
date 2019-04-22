@@ -40,6 +40,7 @@ Common issues:
 
 - Enabling Kubernetes Engine API for your project in Google Cloud Console. If you have not done so, running the command above will provide a link for you to do so.
 - If you are new to Google Cloud Platform, you might need to upgrade your account.
+- There might be an issue of not having enough master nodes which leads to the pods being stuck in the pending state. To circumvent this, we can increase the num-nodes in the command above. In order to increase num-nodes we might also need to request for an increase in the quota in Google Cloud Platform (an error message will pop out with a link to guide you to the page to request for this increase).
 
 #### Option 2: Minikube
 
@@ -96,7 +97,8 @@ kubectl get pods,services
 # mac users can `brew install watch` and run:
 # watch kubectl get pods,services (Hit Ctrl+C to exit)
 
-# create a new release for our production app (ml-app-template)mmand installed a staging)
+# create a new release for our production app (ml-app-template)
+# the first helm install command installed the app in the staging environment only
 cd charts/ml-app-template
 helm install --name ml-cd-starter-kit-prod -f values.yaml .
 # note: if you use another release name, remember to update it in the deploy_prod stage in ml-app-template/ci.gocd.yaml
