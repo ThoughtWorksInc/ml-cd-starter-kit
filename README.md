@@ -27,20 +27,23 @@ export PATH=$HOME/google-cloud-sdk/bin
 - windows: `choco install kubernetes-helm`
 - Other OS: see https://github.com/helm/helm#install
 
+### For the impatient
+
+**Skip ahead to the [quick start guide](./quick_start.md)**
+
 ### Create and configure k8s cluster
 
 #### Option 1: GCP
 
 ```sh
 # provision cluster on GCP
-gcloud container clusters create my-cluster --region asia-southeast1 --num-nodes 2
+gcloud container clusters create my-cluster --region asia-southeast1
 ```
 
 Common issues:
 
 - Enabling Kubernetes Engine API for your project in Google Cloud Console. If you have not done so, running the command above will provide a link for you to do so.
 - If you are new to Google Cloud Platform, you might need to upgrade your account.
-- There might be an issue of not having enough master nodes which leads to the pods being stuck in the pending state. To circumvent this, we can increase the num-nodes in the command above. In order to increase num-nodes we might also need to request for an increase in the quota in Google Cloud Platform (an error message will pop out with a link to guide you to the page to request for this increase).
 
 #### Option 2: Minikube
 
