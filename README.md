@@ -115,14 +115,24 @@ You can now:
   - `MLFLOW_IP`
   - `FLUENTD_IP`
 
-### Other useful commands
+### Configuring the helm charts
 
-Here are some other useful commands that you might want to use
+You can configure the chart and subcharts by updating `./values.yaml`. When you're done, you can run the following commands:
 
 ```sh
-# to apply any changes to your helm charts
-helm upgrade ml-cd-starter-kit -f values.yaml .
+# do a dry run of your helm installation. This will send the chart to the Tiller server, which will render the templates. But instead of installing the chart, it will return the rendered template to you so you can see the output yaml files
+helm install . --dry-run --debug 
 
+# apply your changes to your helm charts
+helm upgrade ml-cd-starter-kit -f values.yaml .
+```
+
+You can read more about how to configure subcharts [here](https://github.com/helm/helm/blob/master/docs/chart_template_guide/subcharts_and_globals.md)
+
+### Other useful commands
+
+Here are some other useful commands that you might find useful:
+```sh
 # to access pods on localhost
 # note: run kubectl get pods to see pod name
 kubectl port-forward --namespace default NAME_OF_POD 8153:8153 # replace 8153 with the port of the service you want to access
