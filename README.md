@@ -4,8 +4,8 @@ A helm chart that contains subcharts commonly used in ML projects (e.g. MLFlow, 
 
 ## Prerequisites Details
 
-* Kubernetes 1.8+
-* PV dynamic provisioning support on the underlying infrastructure
+- Kubernetes 1.8+
+- PV dynamic provisioning support on the underlying infrastructure
 
 ## Getting started
 
@@ -13,13 +13,16 @@ A helm chart that contains subcharts commonly used in ML projects (e.g. MLFlow, 
 
 1. Create project on GCP: https://cloud.google.com/resource-manager/docs/creating-managing-projects
 2. Install `gcloud`
+
 ```bash
 export CLOUDSDK_CORE_DISABLE_PROMPTS=1
 curl https://sdk.cloud.google.com | bash
 export PATH=$HOME/google-cloud-sdk/bin
 ```
+
 3. Configure gcloud cli (authenticate, set default project, etc.): https://cloud.google.com/sdk/docs/quickstart-macos (scroll down to "Initialize the SDK")
 4. Install helm
+
 - mac: `brew install kubernetes-helm`
 - windows: `choco install kubernetes-helm`
 - Other OS: see https://github.com/helm/helm#install
@@ -27,11 +30,16 @@ export PATH=$HOME/google-cloud-sdk/bin
 ### Create and configure k8s cluster
 
 #### Option 1: GCP
+
 ```sh
 # provision cluster on GCP
-gcloud container clusters create my-cluster region asia-southeast1
-
+gcloud container clusters create my-cluster --region asia-southeast1 --num-nodes 2
 ```
+
+Common issues:
+
+- Enabling Kubernetes Engine API for your project in Google Cloud Console. If you have not done so, running the command above will provide a link for you to do so.
+- If you are new to Google Cloud Platform, you might need to upgrade your account.
 
 #### Option 2: Minikube
 
@@ -53,6 +61,7 @@ minikube start --vm-driver=virtualbox --cpus 6 --memory 8192 --bootstrapper=kube
 ```sh
 # create tiller service account and give tiller access to default namespace
 kubectl --namespace kube-system create serviceaccount tiller
+
 kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
 
 # initialize helm on k8s cluster (install tiller into the cluster)
@@ -72,6 +81,7 @@ kubectl get pods,services --all-namespaces
 1. Decide on a name for your helm release (e.g. `ml-cd-starter-kit`)
 2. If you're using another name for your helm release (instead of `ml-cd-starter-kit`), go to `./values.yaml` and replace `ml-cd-starter-kit` with the name of your release in: `elasticsearch.url: http://ml-cd-starter-kit-elasticsearch-client:9200`
 3. Install the following using the helm chart:
+
 - GoCD for continuous integration
 - ElasticSearch, Fluentd, Kibana and Grafana for monitoring
 - MLFlow for tracking metrics and hyperparameters
@@ -95,7 +105,8 @@ helm install --name ml-cd-starter-kit-prod -f values.yaml .
 That's it! You now have a kubernetes cluster running cross-cutting services (GoCD, MLFlow, EFK, Grafana) and an instance of [ml-app-template](https://github.com/ThoughtWorksInc/ml-app-template)
 
 You can now:
-- Access these services (e.g. GoCD, MLFlow). To get the public IP of these services, run `kubectl get services` and look the `EXTERNAL-IP` column. Don't forget to specify the port after the public IP (e.g. MLFlow runs on port 5000) 
+
+- Access these services (e.g. GoCD, MLFlow). To get the public IP of these services, run `kubectl get services` and look the `EXTERNAL-IP` column. Don't forget to specify the port after the public IP (e.g. MLFlow runs on port 5000)
 - Go to your project repo (e.g. [`ml-app-template`](https://github.com/ThoughtWorksInc/ml-app-template)) and start developing and pushing your changes.
 - Configure GoCD as your CI server. 3 additional steps are required, and you can find these steps in [gocd.md](./gocd.md)
 - Update the following in `ml-app-template/src/env.py`:
@@ -105,6 +116,7 @@ You can now:
 ### Other useful commands
 
 Here are some other useful commands that you might want to use
+
 ```sh
 # to apply any changes to your helm charts
 helm upgrade ml-cd-starter-kit -f values.yaml .
@@ -136,8 +148,9 @@ kubectl delete pvc -l release=ml-cd-starter-kit,component=data
 ### Destroy k8s cluster
 
 **Important**
+
 ```diff
-!  Running k8s clusters will get expensive, so definitely remember to destroy your 
+!  Running k8s clusters will get expensive, so definitely remember to destroy your
 !  cluster when you're done exploring this repo:
 ```
 
@@ -147,4 +160,3 @@ kubectl delete pvc -l release=ml-cd-starter-kit,component=data
 
 Each requirement is configured with the options provided by that Chart.
 Please consult the relevant charts for their configuration options.
-
