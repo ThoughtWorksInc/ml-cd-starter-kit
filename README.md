@@ -6,13 +6,8 @@ A helm chart that contains subcharts commonly used in ML projects (e.g. MLFlow, 
 
 - Kubernetes 1.8+
 - PV dynamic provisioning support on the underlying infrastructure
-
-## Getting started
-
-### Pre-requisites
-
-1. Create project on GCP: https://cloud.google.com/resource-manager/docs/creating-managing-projects
-2. Install `gcloud`
+- Create project on GCP: https://cloud.google.com/resource-manager/docs/creating-managing-projects
+- Install `gcloud`:
 
 ```bash
 export CLOUDSDK_CORE_DISABLE_PROMPTS=1
@@ -20,52 +15,30 @@ curl https://sdk.cloud.google.com | bash
 export PATH=$HOME/google-cloud-sdk/bin
 ```
 
-3. Configure gcloud cli (authenticate, set default project, etc.): https://cloud.google.com/sdk/docs/quickstart-macos (scroll down to "Initialize the SDK")
-4. Install helm
+- Configure gcloud cli (authenticate, set default project, etc.): https://cloud.google.com/sdk/docs/quickstart-macos (scroll down to "Initialize the SDK")
+- Install `helm`:
+  - mac: `brew install kubernetes-helm`
+  - windows: `choco install kubernetes-helm`
+  - Other OS: see https://github.com/helm/helm#install
 
-- mac: `brew install kubernetes-helm`
-- windows: `choco install kubernetes-helm`
-- Other OS: see https://github.com/helm/helm#install
 
-### For the impatient
+## Getting started
 
-**Skip ahead to the [quick start guide](./quick_start.md)**
+For the impatient impatient, you can skip ahead to the [quick start guide](./quick_start.md). Otherwise you can follow this README and find more details about which commands to run and what the commands are doing.
 
-### Create and configure k8s cluster
+### Create and configure k8s cluster (using Google Cloud Platform)
 
-#### Option 1: GCP
+Note: For instructions on how to run this locally on minikube instead, see [minikube.md](./docs/minikube.md)
 
 ```sh
 # provision cluster on GCP
 gcloud container clusters create my-cluster --region asia-southeast1
-```
+# note: 
+# - you may have to enable Kubernetes Engine API for your project in the GCP console. If you have not done so, running the command above will provide a link for you to do so.
+# - if you are new to Google Cloud Platform, you might need to upgrade your account when prompted.
 
-Common issues:
-
-- Enabling Kubernetes Engine API for your project in Google Cloud Console. If you have not done so, running the command above will provide a link for you to do so.
-- If you are new to Google Cloud Platform, you might need to upgrade your account.
-
-#### Option 2: Minikube
-
-```sh
-# Optionally delete minikube
-minikube delete
-
-# Ensure that your minikube is at least 0.34
-minikube version
-# if not, upgrade minikube
-brew cask upgrade minikube
-
-# start kubernetes cluster on minikube
-minikube start --vm-driver=virtualbox --cpus 6 --memory 8192 --bootstrapper=kubeadm --extra-config=apiserver.authorization-mode=RBAC
-```
-
-## Install helm
-
-```sh
 # create tiller service account and give tiller access to default namespace
 kubectl --namespace kube-system create serviceaccount tiller
-
 kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
 
 # initialize helm on k8s cluster (install tiller into the cluster)
@@ -80,28 +53,27 @@ kubectl get pods,services --all-namespaces
 # watch kubectl get pods,services --all-namespaces (Hit Ctrl+C to exit) (Hit Ctrl+C to exit)
 ```
 
-## Installing the Chart
+## Install cross-cutting services using helm
 
-1. Decide on a name for your helm release (e.g. `ml-cd-starter-kit`)
-2. If you're using another name for your helm release (instead of `ml-cd-starter-kit`), go to `./values.yaml` and replace `ml-cd-starter-kit` with the name of your release in: `elasticsearch.url: http://ml-cd-starter-kit-elasticsearch-client:9200`
-3. Install the following using the helm chart:
-
+Install the following services using the helm chart:
 - GoCD for continuous integration
 - ElasticSearch, Fluentd, Kibana and Grafana for monitoring
 - MLFlow for tracking metrics and hyperparameters
-- ml-app-template
+- [`ml-app-template`](https://github.com/ThoughtWorksInc/ml-app-template)
 
 ```bash
 helm install --name ml-cd-starter-kit .
-# note: you can replace ml-cd-starter-kit with the name of your release if you want
+# note: you can replace ml-cd-starter-kit with the name of your release if you want.
+# if you do that, you have to replace `ml-cd-starter-kit` with the name of your release in ./values.yaml: elasticsearch.url: http://YOUR_RELEASE_NAME-elasticsearch-client:9200`
+# also, you'll need to replace `ml-cd-starter-kit` with your release name in ml-app-template/ci.gocd.yaml
 
 # wait for pods and services to be up
 kubectl get pods,services
 # mac users can `brew install watch` and run:
 # watch kubectl get pods,services (Hit Ctrl+C to exit)
 
-# create a new release for our production app (ml-app-template)
-# the first helm install command installed the app in the staging environment only
+# create a new release for our 'production' app (ml-app-template)
+# the first helm install command installed the app as our 'staging' app
 cd charts/ml-app-template
 helm install --name ml-cd-starter-kit-prod -f values.yaml .
 # note: if you use another release name, remember to update it in the deploy_prod stage in ml-app-template/ci.gocd.yaml
@@ -112,9 +84,9 @@ That's it! You now have a kubernetes cluster running cross-cutting services (GoC
 You can now:
 
 - Access these services (e.g. GoCD, MLFlow). To get the public IP of these services, run `kubectl get services` and look the `EXTERNAL-IP` column. Don't forget to specify the port after the public IP (e.g. MLFlow runs on port 5000)
-- Go to your project repo (e.g. [`ml-app-template`](https://github.com/ThoughtWorksInc/ml-app-template)) and start developing and pushing your changes.
 - Configure GoCD as your CI server. 3 additional steps are required, and you can find these steps in [gocd.md](./gocd.md)
-- Update the following in `ml-app-template/src/env.py`:
+- Go to your project repo (e.g. [`ml-app-template`](https://github.com/ThoughtWorksInc/ml-app-template)) and start developing and pushing your changes.
+- Update the following in `ml-app-template/src/settings.py`:
   - `MLFLOW_IP`
   - `FLUENTD_IP`
 
@@ -123,7 +95,7 @@ You can now:
 You can configure the chart and subcharts by updating `./values.yaml`. When you're done, you can run the following commands:
 
 ```sh
-# do a dry run of your helm installation. This will send the chart to the Tiller server, which will render the templates. But instead of installing the chart, it will return the rendered template to you so you can see the output yaml files
+# do a dry run of your helm installation. this will send the chart to the Tiller server, which will render the templates. But instead of installing the chart, it will return the rendered template to you so you can see the output yaml files
 helm install . --dry-run --debug 
 
 # apply your changes to your helm charts
