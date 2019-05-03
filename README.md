@@ -21,11 +21,6 @@ export PATH=$HOME/google-cloud-sdk/bin
   - windows: `choco install kubernetes-helm`
   - Other OS: see https://github.com/helm/helm#install
 
-
-## Getting started
-
-For the impatient impatient, you can skip ahead to the [quick start guide](./quick_start.md). Otherwise you can follow this README and find more details about which commands to run and what the commands are doing.
-
 ### Create and configure k8s cluster (using Google Cloud Platform)
 
 Note: For instructions on how to run this locally on minikube instead, see [minikube.md](./docs/minikube.md)
